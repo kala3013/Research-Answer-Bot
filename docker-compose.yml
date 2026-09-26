@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data
+      - ./vectorstore:/app/vectorstore
+      - ./ingestion:/app/ingestion
+      - ./embeddings:/app/embeddings
+      - ./retrieval:/app/retrieval
+      - ./rag:/app/rag
+      - ./evaluation:/app/evaluation
+      - ./corrective_rag:/app/corrective_rag
+      - ./utils:/app/utils
+      - ./frontend:/app/frontend
+      - ./tests:/app/tests
+      - ./notebooks:/app/notebooks
+      - ./scripts:/app/scripts
+      - ./presentation:/app/presentation
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  data:
+  vectorstore:
